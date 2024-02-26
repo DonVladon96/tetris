@@ -71,7 +71,7 @@ class View {
 
   _renderBlock = (x, y, width, height, color) => {
     this._context.fillStyle = color;
-    this._context.strokeStyle = '#E4E4E4';
+    this._context.strokeStyle = '#de5c6b';
     this._context.lineWidth = 2;
 
     this._context.fillRect(x, y, width, height);
