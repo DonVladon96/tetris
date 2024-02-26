@@ -13,7 +13,6 @@ class Game {
   // движение фигуры налево
   movePieceLeft = () => {
     this.activePiece.x -= 1;
-
     // если перемещение фигуры было на несуществующую позицию, возвращаем её обратно
     if (this.hasCollision()) this.activePiece.x += 1;
   };
@@ -21,16 +20,13 @@ class Game {
   // движение фигуры направо
   movePieceRight = () => {
     this.activePiece.x += 1;
-
     if (this.hasCollision()) this.activePiece.x -= 1;
   };
 
   // движение фигуры вниз
   movePieceDown = () => {
     if (this._topOut) return
-
     this.activePiece.y += 1;
-
     if (this.hasCollision()) {
       this.activePiece.y -= 1;
       // если фигура дошла до низа или столкнулась с другой фигурой, фиксируем её
@@ -39,10 +35,8 @@ class Game {
       const clearedLines = this._clearLines();
       // обновить счет
       this._updateScore(clearedLines);
-
       this._updatePieces();
     }
-
     // если после столкновения, новая фигура сразу столкнулась
     if (this.hasCollision()) {
       this._topOut = true;
@@ -52,18 +46,15 @@ class Game {
   rotatePiece = () => {
     // изменение индекса при повороте фигуры
     this.activePiece.rotationIndex = (this.activePiece.rotationIndex + 1) % 4;
-
     if (this.hasCollision()) {
       this.activePiece.rotationIndex = (4 - (this.activePiece.rotationIndex + 1)) % 4;
     }
-
     return this.activePiece;
   }
 
   // проверка выходит ли фигура за границы поля
   hasCollision = () => {
     const { y: pieceY, x: pieceX, blocks } = this.activePiece;
-
     for (let y = 0; y < blocks.length; y++) {
       for (let x = 0; x < blocks[y].length; x++) {
         if (
@@ -71,14 +62,13 @@ class Game {
           blocks[y][x] &&
           // проверка расположения блока в пределах игрового поля
           ((this.playfield[pieceY + y] === undefined || this.playfield[pieceY + y][pieceX + x] === undefined) ||
-          // проверка свободного места в игровом поле, столкновение фигур
-          this.playfield[pieceY + y][pieceX + x])
+            // проверка свободного места в игровом поле, столкновение фигур
+            this.playfield[pieceY + y][pieceX + x])
         ) {
           return true
         }
       }
     }
-
     // если обратиться к несуществующему индексу
     return false
   }
@@ -88,16 +78,13 @@ class Game {
     const rows = 20;
     const columns = 10;
     let lines = [];
-
     for (let y = rows - 1; y >= 0; y--) {
       let numberOfBlocks = 0;
-
       for (let x = 0; x < columns; x++) {
         if (this.playfield[y][x]) {
           numberOfBlocks += 1;
         }
       }
-
       if (numberOfBlocks === 0) {
         break;
       } else if (numberOfBlocks < columns) {
@@ -106,15 +93,12 @@ class Game {
         lines.unshift(y)
       }
     }
-
     for (let index of lines) {
       // вырезать заполненную линию
       this.playfield.splice(index, 1);
-
       // добавить новую линию
       this.playfield.unshift(new Array(columns).fill(0));
     }
-
     // количество удаляемых линий
     return lines.length
   }
@@ -122,7 +106,6 @@ class Game {
   // зафиксировать положение фигуры
   _lockPiece = () => {
     const { y: pieceY, x: pieceX, blocks } = this.activePiece;
-
     for (let y = 0; y < blocks.length; y++) {
       for (let x = 0; x < blocks[y].length; x++) {
         // если блок не пустая ячейка
@@ -152,7 +135,6 @@ class Game {
       },
       rotationIndex: 0,
     };
-
     switch (type) {
       case 'I':
         piece.rotations = this._setting.pieceRotationsI;
@@ -178,11 +160,9 @@ class Game {
       default:
         throw new Error('unknown shape type');
     }
-
     // установка появления фигуры по центру
     piece.x = Math.floor((10 - piece.rotations[0].length) / 2);
     piece.y = 0;
-
     return piece;
   }
 
@@ -206,35 +186,29 @@ class Game {
     // термин из терминологии tetris, что игрок дошел до верха игрового поля
     this._topOut = false;
     // поле имеет размер 20х10
-    this.playfield = this._createPlayField(); // * заменить на значение createPlayField
+    this.playfield = this._createPlayField();
   }
 
   _createPlayField = () => {
     const playfield = [];
-
     for (let y = 0; y < 20; y++) {
       playfield[y] = [];
-
       for (let x = 0; x < 10; x++) {
         playfield[y][x] = 0;
       }
     }
-
     return playfield;
   }
 
   getState = () => {
     const playfield = this._createPlayField();
     const { y: pieceY, x: pieceX, blocks } = this.activePiece;
-
     for (let y = 0; y < this.playfield.length; y++) {
       playfield[y] = [];
-
       for (let x = 0; x < this.playfield[y].length; x++) {
         playfield[y][x] = this.playfield[y][x];
       }
     }
-
     for (let y = 0; y < blocks.length; y++) {
       for (let x = 0; x < blocks[y].length; x++) {
         if (blocks[y][x]) {
@@ -242,7 +216,6 @@ class Game {
         }
       }
     }
-
     return {
       score: this._score,
       level: this.level,
@@ -254,4 +227,4 @@ class Game {
   }
 }
 
-export default Game
+export default Game;
